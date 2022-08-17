@@ -13,27 +13,51 @@ with open('books.json', 'r') as _:
     print(book_list)
 
 
+def save():
+    with open('books.json', 'w') as file:
+        json.dump(book_list, file)
+
+
 def add_book():
     title = input("Please enter book's title: ")
     author = input("Please enter book's author: ")
     book = Book(title, author)
     book_list.append(book.__dict__)
-    with open('books.json', 'w') as file:
-        json.dump(book_list, file)
+    save()
 
 
 def remove_book():
-    pass
+    success = False
+    rem = input('Enter title of the book to be removed: ')
+    for book in book_list:
+        if rem in book.values():
+            book_list.remove(book)
+            save()
+            print('Book removed.\n')
+            success = True
+            break
+    if not success:
+        print('Book not found!\n')
 
 
 def list_books():
     for book in book_list:
-        print(f'"{book["name"]}" by {book["author"]}')
+        print(f'"{book["name"]}" by {book["author"]} \tread:{book["read"]}')
     print()
 
 
 def mark_read():
-    pass
+    success = False
+    r = input("Enter the title of the book You've  read: ")
+    for book in book_list:
+        if r in book.values():
+            book.update({'read': True})
+            success = True
+            save()
+            print('Marked as read.\n')
+            break
+    if not success:
+        print('Book not found!\n')
 
 
 print('Welcome to our library!')
